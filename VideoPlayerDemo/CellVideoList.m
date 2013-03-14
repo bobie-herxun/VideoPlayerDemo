@@ -26,4 +26,10 @@
     // Configure the view for the selected state
 }
 
+- (void)dealloc {
+    [_imageThumbnail release];
+    [_labelCategory release];
+    [_labelTitle release];
+    [super dealloc];
+}
 @end

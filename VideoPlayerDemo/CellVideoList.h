@@ -10,4 +10,9 @@
 
 @interface CellVideoList : UITableViewCell
 
+@property (retain, nonatomic) IBOutlet UIImageView *imageThumbnail;
+@property (retain, nonatomic) IBOutlet UILabel *labelCategory;
+@property (retain, nonatomic) IBOutlet UILabel *labelTitle;
+
+
 @end
