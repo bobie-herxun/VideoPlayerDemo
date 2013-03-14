@@ -13,6 +13,9 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imageThumbnail;
 @property (retain, nonatomic) IBOutlet UILabel *labelCategory;
 @property (retain, nonatomic) IBOutlet UILabel *labelTitle;
+@property (nonatomic, retain) NSString* strThumbnailURL;
+@property (nonatomic, retain) NSString* strVideoURL;
 
+- (void)prepareThumbnail;
 
 @end

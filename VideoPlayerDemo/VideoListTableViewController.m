@@ -7,6 +7,7 @@
 //
 
 #import "VideoListTableViewController.h"
+#import "CellVideoList.h"
 #import "NetworkManager.h"
 
 @interface VideoListTableViewController ()
@@ -100,13 +101,28 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"";
+    CellVideoList *cell;
     if (indexPath.section == 0)
+    {
         CellIdentifier = @"CellIDVideoList_playlist";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    }
     else
+    {
         CellIdentifier = @"CellIDVideoList";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        
+        if ([m_arrayVideoList count])
+        {
+            cell.labelCategory.text = @"《新聞》";
+            cell.labelTitle.text = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"title"];
+            cell.strThumbnailURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"thumbnail"];
+            cell.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
+        }
+        
+        [cell prepareThumbnail];
+    }
+
     // Configure the cell...
     
     return cell;
