@@ -33,18 +33,45 @@
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    if (!m_arrayVideoList)
+        m_arrayVideoList = [[NSMutableArray alloc] initWithCapacity:0];
     
-    //[self performSelector:@selector(loadNTVNewsList) withObject:nil afterDelay:0.5f];
+    [self performSelector:@selector(loadNTVNewsList) withObject:nil afterDelay:0.5f];
 }
 
 - (void)loadNTVNewsList
 {
+    [m_arrayVideoList removeAllObjects];
+    
     NSLog(@"送HTTP Request去NTV server要news video list feed");
     NSString* strAPIURL = @"http://ews.nexttv.com.tw/pgm/getntvpgmdetails/pgmid/15470966/num/15/";
     [NetworkManager sendRequestGet:strAPIURL withPayload:nil completeCallback:^(NSData *data) {
-        int dummy = 0;
-        dummy++;
+        NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+        
+        NSDictionary* articles = [dict objectForKey:@"articles"];
+        for (NSDictionary* video in articles)
+        {
+            NSString* videoUrl = [[[[video objectForKey:@"videos"] objectForKey:@"mobile_video"] objectAtIndex:0] objectForKey:@"mobilevideourl"];
+            
+            NSArray* arrayObjects = @[ [video objectForKey:@"artid"], [video objectForKey:@"arturl"], [video objectForKey:@"title"],
+                                       [video objectForKey:@"timestamp"], [video objectForKey:@"text"], [[video objectForKey:@"pic"] objectForKey:@"w300h170"],
+                                       videoUrl ];
+            NSArray* arrayKeys = @[ @"artid", @"arturl", @"title", @"timestamp", @"text", @"thumbnail", @"videourl" ];
+            
+            NSDictionary* newVideo = [[NSDictionary alloc] initWithObjects:arrayObjects forKeys:arrayKeys];
+            
+            [m_arrayVideoList addObject:newVideo];
+        }
+        
+        [self performSelectorOnMainThread:@selector(updateTableVide) withObject:nil waitUntilDone:NO];
     }];
+}
+
+- (void)updateTableVide
+{
+    NSLog(@"Prepare to update table");
+    
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -67,7 +94,7 @@
     if (section == 0)
         return 1;
     else
-        return 5;
+        return [m_arrayVideoList count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

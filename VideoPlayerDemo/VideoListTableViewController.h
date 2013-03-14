@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface VideoListTableViewController : UITableViewController
+{
+    NSMutableArray* m_arrayVideoList;
+}
 
 @end
