@@ -10,4 +10,6 @@
 
 @interface NetworkManager : NSObject
 
++ (void)sendRequestGet:(NSString*)strAPIURL withPayload:(NSString*)strPayload completeCallback:(void (^)(NSData* data))completion;
+
 @end
