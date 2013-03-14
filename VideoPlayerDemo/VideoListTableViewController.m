@@ -9,6 +9,7 @@
 #import "VideoListTableViewController.h"
 #import "CellVideoList.h"
 #import "NetworkManager.h"
+#import "VideoPlayerViewController.h"
 
 @interface VideoListTableViewController ()
 
@@ -79,6 +80,13 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    VideoPlayerViewController* playerViewController = segue.destinationViewController;
+    NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
+    playerViewController.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
 }
 
 #pragma mark - Table view data source
