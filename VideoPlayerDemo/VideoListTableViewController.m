@@ -32,6 +32,13 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    [self performSelector:@selector(loadNTVNewsList) withObject:nil afterDelay:0.5f];
+}
+
+- (void)loadNTVNewsList
+{
+    NSLog(@"送HTTP Request去NTV server要news video list feed");
 }
 
 - (void)didReceiveMemoryWarning
