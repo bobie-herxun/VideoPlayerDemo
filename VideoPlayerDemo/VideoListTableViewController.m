@@ -7,6 +7,7 @@
 //
 
 #import "VideoListTableViewController.h"
+#import "NetworkManager.h"
 
 @interface VideoListTableViewController ()
 
@@ -33,12 +34,17 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    [self performSelector:@selector(loadNTVNewsList) withObject:nil afterDelay:0.5f];
+    //[self performSelector:@selector(loadNTVNewsList) withObject:nil afterDelay:0.5f];
 }
 
 - (void)loadNTVNewsList
 {
     NSLog(@"送HTTP Request去NTV server要news video list feed");
+    NSString* strAPIURL = @"http://ews.nexttv.com.tw/pgm/getntvpgmdetails/pgmid/15470966/num/15/";
+    [NetworkManager sendRequestGet:strAPIURL withPayload:nil completeCallback:^(NSData *data) {
+        int dummy = 0;
+        dummy++;
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -66,7 +72,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"CellIDVideoList";
+    static NSString *CellIdentifier = @"";
+    if (indexPath.section == 0)
+        CellIdentifier = @"CellIDVideoList_playlist";
+    else
+        CellIdentifier = @"CellIDVideoList";
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...

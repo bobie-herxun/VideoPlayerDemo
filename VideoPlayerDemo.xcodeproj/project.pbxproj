@@ -19,6 +19,8 @@
 		2C5BD69016F16E7A00E86041 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C5BD68E16F16E7A00E86041 /* MainStoryboard.storyboard */; };
 		2C5BD69316F16E7A00E86041 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BD69216F16E7A00E86041 /* ViewController.m */; };
 		2C5BD69B16F16FE200E86041 /* VideoListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BD69A16F16FE200E86041 /* VideoListTableViewController.m */; };
+		80B3A13E16F1D0180094E1DE /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A13D16F1D0180094E1DE /* NetworkManager.m */; };
+		80B3A14116F1DC7E0094E1DE /* CellVideoList.m in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A14016F1DC7E0094E1DE /* CellVideoList.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,10 @@
 		2C5BD69216F16E7A00E86041 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		2C5BD69916F16FE200E86041 /* VideoListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoListTableViewController.h; sourceTree = "<group>"; };
 		2C5BD69A16F16FE200E86041 /* VideoListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoListTableViewController.m; sourceTree = "<group>"; };
+		80B3A13C16F1D0180094E1DE /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
+		80B3A13D16F1D0180094E1DE /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
+		80B3A13F16F1DC7E0094E1DE /* CellVideoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellVideoList.h; sourceTree = "<group>"; };
+		80B3A14016F1DC7E0094E1DE /* CellVideoList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellVideoList.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,10 +95,14 @@
 				2C5BD68516F16E7A00E86041 /* AppDelegate.h */,
 				2C5BD68616F16E7A00E86041 /* AppDelegate.m */,
 				2C5BD68E16F16E7A00E86041 /* MainStoryboard.storyboard */,
+				80B3A13F16F1DC7E0094E1DE /* CellVideoList.h */,
+				80B3A14016F1DC7E0094E1DE /* CellVideoList.m */,
 				2C5BD69116F16E7A00E86041 /* ViewController.h */,
 				2C5BD69216F16E7A00E86041 /* ViewController.m */,
 				2C5BD69916F16FE200E86041 /* VideoListTableViewController.h */,
 				2C5BD69A16F16FE200E86041 /* VideoListTableViewController.m */,
+				80B3A13C16F1D0180094E1DE /* NetworkManager.h */,
+				80B3A13D16F1D0180094E1DE /* NetworkManager.m */,
 				2C5BD67D16F16E7A00E86041 /* Supporting Files */,
 			);
 			path = VideoPlayerDemo;
@@ -182,6 +192,8 @@
 				2C5BD68716F16E7A00E86041 /* AppDelegate.m in Sources */,
 				2C5BD69316F16E7A00E86041 /* ViewController.m in Sources */,
 				2C5BD69B16F16FE200E86041 /* VideoListTableViewController.m in Sources */,
+				80B3A13E16F1D0180094E1DE /* NetworkManager.m in Sources */,
+				80B3A14116F1DC7E0094E1DE /* CellVideoList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +314,7 @@
 				2C5BD69816F16E7A00E86041 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
