@@ -40,21 +40,73 @@
 
 - (void)prepareVideoPlayer
 {
-    MPMoviePlayerController* player = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.strVideoURL]];
+    self.player = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.strVideoURL]];
     CGRect frame = CGRectMake(10, 10, 300, 200);;
-    player.view.frame = frame;
+    self.player.view.frame = frame;
     
-    [self.view addSubview:player.view];
+    [self.view addSubview:self.player.view];
     
-    player.movieSourceType = MPMovieSourceTypeFile;
+    NSString* ext = [self.strVideoURL pathExtension];
+    if ([ext isEqualToString:@"m3u8"])
+        self.player.movieSourceType = MPMovieSourceTypeStreaming;
+    else
+        self.player.movieSourceType = MPMovieSourceTypeFile;
     
-    [player setFullscreen:YES animated:YES];
-    [player prepareToPlay];
-    [player play];
+    [self initPlayerNotifications];
+    
+    [self.player setFullscreen:YES animated:YES];
+    [self.player prepareToPlay];
+    [self.player play];
+}
+
+- (void)initPlayerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onPlaybackStateChange)
+                                                 name:MPMoviePlayerPlaybackStateDidChangeNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onLoadStateChanged)
+                                                 name:MPMoviePlayerLoadStateDidChangeNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onPlaybackDidFinished)
+                                                 name:MPMoviePlayerPlaybackDidFinishNotification
+                                               object:nil];
+}
+
+#pragma mark - State-aware notifications
+- (void)onPlaybackStateChange
+{
+    NSLog([NSString stringWithFormat:@"playbackstate: %d", [self.player playbackState]]);
+    if ([self.player playbackState] == MPMoviePlaybackStateStopped)
+    {
+        if (self.player.fullscreen)
+            [self.player setFullscreen:NO];
+    }
+}
+
+- (void)onLoadStateChanged
+{
+    NSLog([NSString stringWithFormat:@"loadstate: %d", [self.player loadState]]);
+    if ([self.player loadState] == MPMovieLoadStatePlayable)
+    {
+        [self.player setFullscreen:YES];
+    }
+}
+
+- (void)onPlaybackDidFinished
+{
+    if (self.player.fullscreen)
+        [self.player setFullscreen:NO animated:YES];
+    
+    [self backToVideoList:nil];
 }
 
 - (IBAction)backToVideoList:(id)sender {
-    //[self presentViewController:[self presentingViewController] animated:YES completion:nil];
+    [self.player release];
     [self dismissModalViewControllerAnimated:YES];
 }
 @end

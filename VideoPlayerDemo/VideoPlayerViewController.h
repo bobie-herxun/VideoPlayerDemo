@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface VideoPlayerViewController : UIViewController
 
+@property (nonatomic, retain) MPMoviePlayerController* player;
 @property (nonatomic, retain) NSString* strVideoURL;
 
 - (IBAction)backToVideoList:(id)sender;

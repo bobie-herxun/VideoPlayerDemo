@@ -63,13 +63,14 @@
             NSDictionary* newVideo = [[NSDictionary alloc] initWithObjects:arrayObjects forKeys:arrayKeys];
             
             [m_arrayVideoList addObject:newVideo];
+            [newVideo release];
         }
-        
-        [self performSelectorOnMainThread:@selector(updateTableVide) withObject:nil waitUntilDone:NO];
+
+        [self performSelectorOnMainThread:@selector(updateTableView) withObject:nil waitUntilDone:NO];
     }];
 }
 
-- (void)updateTableVide
+- (void)updateTableView
 {
     NSLog(@"Prepare to update table");
     
@@ -86,7 +87,10 @@
 {
     VideoPlayerViewController* playerViewController = segue.destinationViewController;
     NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
-    playerViewController.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
+    if ([self.tableView indexPathForSelectedRow].section == 1)
+        playerViewController.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
+    else
+        playerViewController.strVideoURL = @"https://www.youtube.com/v/u1zgFlCw8Aw?version=3&autoplay=1"; //@"http://iphonestream.nexttv.com.tw/iphone/mbr.m3u8";
 }
 
 #pragma mark - Table view data source
@@ -110,10 +114,15 @@
 {
     static NSString *CellIdentifier = @"";
     CellVideoList *cell;
+    NSString* debug = [NSString stringWithFormat:@"cell index row: %d", indexPath.row];
+    NSLog(debug);
     if (indexPath.section == 0)
     {
         CellIdentifier = @"CellIDVideoList_playlist";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        cell.labelCategory.text = @"《即時》";
+        cell.labelTitle.text = @"即時線上新聞轉播";
+        cell.strVideoURL = @"https://www.youtube.com/v/u1zgFlCw8Aw?version=3&autoplay=1"; //@"http://iphonestream.nexttv.com.tw/iphone/mbr.m3u8";
     }
     else
     {

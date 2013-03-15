@@ -8,13 +8,16 @@
 
 #import "CellVideoList.h"
 
-@implementation CellVideoList
+@implementation CellVideoList {
+    BOOL m_bLoaded;
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        m_bLoaded = NO;
     }
     return self;
 }
@@ -33,15 +36,19 @@
     [super dealloc];
 }
 
-- (void)refreshVideoThumbnail
+- (void)refreshVideoThumbnail:(UIImage*)image
 {
     CGRect frame = self.imageThumbnail.frame;
     self.imageThumbnail.frame = frame;
+    //m_bLoaded = YES;
 }
 
 - (void)prepareThumbnail
 {
     if ([self.strThumbnailURL isEqualToString:@""])
+        return;
+    
+    if (m_bLoaded)
         return;
     
     NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.strThumbnailURL]];
@@ -67,10 +74,12 @@
                     // Important!! access UI elements like assigning size or frame, should be done in main thread
                     // Else app will crash
                     //
-                    [self performSelectorOnMainThread:@selector(refreshVideoThumbnail) withObject:nil waitUntilDone:NO];
+                    //[self performSelectorOnMainThread:@selector(refreshVideoThumbnail) withObject:nil waitUntilDone:NO];
                 }
             }
         }];
+    
+    //[request release];
 }
 
 @end
