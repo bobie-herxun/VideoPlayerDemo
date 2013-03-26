@@ -39,6 +39,7 @@
         m_arrayVideoList = [[NSMutableArray alloc] initWithCapacity:0];
     
     [self.tableView setDelaysContentTouches:NO];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     [self performSelector:@selector(loadNTVNewsList) withObject:nil afterDelay:0.5f];
 }
@@ -87,12 +88,15 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    VideoPlayerViewController* playerViewController = segue.destinationViewController;
-    NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
-    if ([self.tableView indexPathForSelectedRow].section == 1)
-        playerViewController.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
-    else
-        playerViewController.strVideoURL = @"https://www.youtube.com/v/u1zgFlCw8Aw?version=3&autoplay=1"; //@"http://iphonestream.nexttv.com.tw/iphone/mbr.m3u8";
+    if ([segue.identifier isEqualToString:@"segueVideoPlayer"])
+    {
+        VideoPlayerViewController* playerViewController = segue.destinationViewController;
+        NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
+        if ([self.tableView indexPathForSelectedRow].section == 1)
+            playerViewController.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
+        else
+            playerViewController.strVideoURL = @"https://www.youtube.com/v/u1zgFlCw8Aw?version=3&autoplay=1"; //@"http://iphonestream.nexttv.com.tw/iphone/mbr.m3u8";
+    }
 }
 
 #pragma mark - Table view data source

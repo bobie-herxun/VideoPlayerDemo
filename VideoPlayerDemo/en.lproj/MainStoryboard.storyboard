@@ -4,12 +4,12 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
-        <!--Video List Table View Controller-->
+        <!--Video List Table View Controller - Video List-->
         <scene sceneID="5">
             <objects>
                 <viewController id="2" customClass="VideoListTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="99" sectionHeaderHeight="22" sectionFooterHeight="22" id="eao-lh-Oxy">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -50,7 +50,7 @@
                                     <outlet property="imageThumbnail" destination="TGL-F5-Zd1" id="CfW-hJ-FU9"/>
                                     <outlet property="labelCategory" destination="HsR-d1-p46" id="x4M-81-Ya7"/>
                                     <outlet property="labelTitle" destination="ANh-oY-45T" id="Eou-ue-9W8"/>
-                                    <segue destination="PQU-tO-2p6" kind="modal" id="URc-QC-I5N"/>
+                                    <segue destination="PQU-tO-2p6" kind="modal" identifier="segueVideoPlayer" id="URc-QC-I5N"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="CellIDVideoList" rowHeight="100" id="0Jq-OZ-QQg" customClass="CellVideoList">
@@ -94,6 +94,9 @@
                                             <state key="highlighted">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <segue destination="deU-Z9-tZo" kind="push" id="0GO-jd-l7u"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -103,18 +106,85 @@
                                     <outlet property="imageThumbnail" destination="tPs-3a-dMo" id="uBV-2a-kGS"/>
                                     <outlet property="labelCategory" destination="d0z-dS-GvP" id="D17-qh-I0J"/>
                                     <outlet property="labelTitle" destination="FBI-Hr-nh6" id="SMI-Ty-pLF"/>
-                                    <segue destination="PQU-tO-2p6" kind="modal" id="oBn-S8-8b8"/>
+                                    <segue destination="PQU-tO-2p6" kind="modal" identifier="segueVideoPlayer" id="oBn-S8-8b8"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
                     </tableView>
-                    <navigationItem key="navigationItem" id="dIP-HD-YN7"/>
-                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationItem key="navigationItem" title="Video List" id="dIP-HD-YN7"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="blackOpaque" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="745" y="113"/>
+        </scene>
+        <!--Download Table View Controller - Downloads-->
+        <scene sceneID="Kcc-eL-CHH">
+            <objects>
+                <tableViewController id="deU-Z9-tZo" customClass="DownloadTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Kry-AK-xbX">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CellIDVideoDownloadList" id="LGP-Gj-j7t" customClass="CellVideoDownloadList">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="VdB-4m-rRD">
+                                            <rect key="frame" x="8" y="5" width="60" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </imageView>
+                                        <progressView opaque="NO" contentMode="scaleToFill" progress="0.5" id="lqM-bO-6kw">
+                                            <rect key="frame" x="76" y="25" width="194" height="9"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </progressView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gH3-pg-mdv">
+                                            <rect key="frame" x="283" y="7" width="30" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                            <state key="normal" title="Button">
+                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="btnPlayClicked:" destination="LGP-Gj-j7t" eventType="touchUpInside" id="ds3-El-EG6"/>
+                                            </connections>
+                                        </button>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="我是標題 我是標題 我是標題 我是標題" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yRf-bg-It0">
+                                            <rect key="frame" x="76" y="3" width="194" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <connections>
+                                    <outlet property="btnPlay" destination="gH3-pg-mdv" id="eC2-R3-U5l"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="deU-Z9-tZo" id="dYF-Oa-wiS"/>
+                            <outlet property="delegate" destination="deU-Z9-tZo" id="C1a-9c-u3E"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Downloads" id="qRB-qn-FXc"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wKG-Xy-MrB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="745" y="765"/>
         </scene>
         <!--Video Player View Controller-->
         <scene sceneID="ln0-tx-U7l">
@@ -151,11 +221,11 @@
         <!--Navigation Controller-->
         <scene sceneID="pLn-Kr-DWG">
             <objects>
-                <navigationController navigationBarHidden="YES" id="h7O-IN-7h3" sceneMemberID="viewController">
+                <navigationController id="h7O-IN-7h3" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <nil key="simulatedTopBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="blackOpaque" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="NTK-Qw-Uji">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="blackOpaque" id="NTK-Qw-Uji">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -173,6 +243,13 @@
         <image name="play.png" width="150" height="150"/>
     </resources>
     <classes>
+        <class className="CellVideoDownloadList" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CellVideoDownloadList.h"/>
+            <relationships>
+                <relationship kind="action" name="btnPlayClicked:"/>
+                <relationship kind="outlet" name="btnPlay" candidateClass="UIButton"/>
+            </relationships>
+        </class>
         <class className="CellVideoList" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CellVideoList.h"/>
             <relationships>
@@ -180,6 +257,12 @@
                 <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="labelCategory" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="DownloadTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DownloadTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="btnPlayClicked:"/>
             </relationships>
         </class>
         <class className="VideoListTableViewController" superclassName="UITableViewController">
