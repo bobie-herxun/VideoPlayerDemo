@@ -101,14 +101,18 @@
     if ([segue.identifier isEqualToString:@"segueAddDownload"])
     {
         NSLog(@"segueAddDownload");
-        DownloadTableViewController* downloadTableViewController = segue.destinationViewController;
+        //DownloadTableViewController* downloadTableViewController = segue.destinationViewController;
         NSIndexPath* indexPath = ((DownloadVideoButton*)sender).parentCellIndexPath;
         if (indexPath.section == 2)
         {
-            NSMutableDictionary* dictVideoToDownload = [[m_arrayDownloadList objectAtIndex:indexPath.row] mutableCopy];
-            dictVideoToDownload setObject:<#(id)#> forKey:<#(id<NSCopying>)#>
-            [downloadTableViewController startDownload:[[m_arrayVideoList objectAtIndex:indexPath.row] mutableCopy]
-                                          andThumbnail:((CellVideoList*)([self.tableView cellForRowAtIndexPath:indexPath])).imageThumbnail.image];
+            NSString* strFilename = [(NSString*)[[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"] lastPathComponent];
+            NSString* strFilepath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:strFilename];
+            NSMutableDictionary* dictVideoToDownload = [[m_arrayVideoList objectAtIndex:indexPath.row] mutableCopy];
+            [dictVideoToDownload setObject:strFilepath forKey:@"filepath"];
+            [m_arrayDownloadList addObject:dictVideoToDownload];
+            NSLog(@"video dict: %@", dictVideoToDownload);
+//            [downloadTableViewController startDownload:[[m_arrayVideoList objectAtIndex:indexPath.row] mutableCopy]
+//                                          andThumbnail:((CellVideoList*)([self.tableView cellForRowAtIndexPath:indexPath])).imageThumbnail.image];
         }
     }
 }
