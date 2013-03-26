@@ -83,10 +83,23 @@
                                             <rect key="frame" x="43" y="12" width="75" height="75"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="t3d-sX-Ml1">
+                                            <rect key="frame" x="281" y="13" width="25" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" size="button"/>
+                                            <state key="normal">
+                                                <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
+                                    <outlet property="btnDownload" destination="t3d-sX-Ml1" id="0hq-F6-EcL"/>
                                     <outlet property="imageThumbnail" destination="tPs-3a-dMo" id="uBV-2a-kGS"/>
                                     <outlet property="labelCategory" destination="d0z-dS-GvP" id="D17-qh-I0J"/>
                                     <outlet property="labelTitle" destination="FBI-Hr-nh6" id="SMI-Ty-pLF"/>
@@ -163,6 +176,7 @@
         <class className="CellVideoList" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CellVideoList.h"/>
             <relationships>
+                <relationship kind="outlet" name="btnDownload" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="labelCategory" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>

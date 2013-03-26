@@ -33,6 +33,7 @@
     [_imageThumbnail release];
     [_labelCategory release];
     [_labelTitle release];
+    [_btnDownload release];
     [super dealloc];
 }
 

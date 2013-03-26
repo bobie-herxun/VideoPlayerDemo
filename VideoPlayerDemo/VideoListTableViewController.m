@@ -38,6 +38,8 @@
     if (!m_arrayVideoList)
         m_arrayVideoList = [[NSMutableArray alloc] initWithCapacity:0];
     
+    [self.tableView setDelaysContentTouches:NO];
+    
     [self performSelector:@selector(loadNTVNewsList) withObject:nil afterDelay:0.5f];
 }
 
@@ -134,6 +136,8 @@
             cell.labelTitle.text = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"title"];
             cell.strThumbnailURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"thumbnail"];
             cell.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
+            [cell.btnDownload setImage:[UIImage imageNamed:@"download_up.png"] forState:UIControlStateNormal];
+            [cell.btnDownload setImage:[UIImage imageNamed:@"download_down.png"] forState:UIControlStateHighlighted];
         }
         
         [cell resetThumbnailView];
