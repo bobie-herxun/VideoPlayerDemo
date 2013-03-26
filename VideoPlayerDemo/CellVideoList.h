@@ -7,17 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DownloadVideoButton.h"
 
 @interface CellVideoList : UITableViewCell
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageThumbnail;
 @property (retain, nonatomic) IBOutlet UILabel *labelCategory;
 @property (retain, nonatomic) IBOutlet UILabel *labelTitle;
-@property (retain, nonatomic) IBOutlet UIButton *btnDownload;
+@property (retain, nonatomic) IBOutlet DownloadVideoButton *btnDownload;
 @property (nonatomic, retain) NSString* strThumbnailURL;
 @property (nonatomic, retain) NSString* strVideoURL;
 
-- (void)resetThumbnailView;
 - (void)prepareThumbnail;
 
 @end

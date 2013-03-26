@@ -30,6 +30,16 @@
     [_btnPlay release];
     [super dealloc];
 }
+
 - (IBAction)btnPlayClicked:(id)sender {
+    //NSString* bundlePath = [NSString stringWithFormat:@"%@/VideoPlayerDemo", [[NSBundle mainBundle] bundlePath]];
+    NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
+    NSLog(@"bundle root: %@", bundlePath);
+    
+    NSFileManager* fm = [NSFileManager defaultManager];
+    NSArray* dirContents = [fm contentsOfDirectoryAtPath:bundlePath error:nil];
+    
+    NSLog(@"bundle contents: %@", dirContents);
 }
+
 @end

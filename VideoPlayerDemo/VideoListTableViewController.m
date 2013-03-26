@@ -10,6 +10,7 @@
 #import "CellVideoList.h"
 #import "NetworkManager.h"
 #import "VideoPlayerViewController.h"
+#import "DownloadTableViewController.h"
 
 @interface VideoListTableViewController ()
 
@@ -92,10 +93,23 @@
     {
         VideoPlayerViewController* playerViewController = segue.destinationViewController;
         NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
-        if ([self.tableView indexPathForSelectedRow].section == 1)
+        if ([self.tableView indexPathForSelectedRow].section == 2)
             playerViewController.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
         else
             playerViewController.strVideoURL = @"https://www.youtube.com/v/u1zgFlCw8Aw?version=3&autoplay=1"; //@"http://iphonestream.nexttv.com.tw/iphone/mbr.m3u8";
+    }
+    if ([segue.identifier isEqualToString:@"segueAddDownload"])
+    {
+        NSLog(@"segueAddDownload");
+        DownloadTableViewController* downloadTableViewController = segue.destinationViewController;
+        NSIndexPath* indexPath = ((DownloadVideoButton*)sender).parentCellIndexPath;
+        if (indexPath.section == 2)
+        {
+            NSMutableDictionary* dictVideoToDownload = [[m_arrayDownloadList objectAtIndex:indexPath.row] mutableCopy];
+            dictVideoToDownload setObject:<#(id)#> forKey:<#(id<NSCopying>)#>
+            [downloadTableViewController startDownload:[[m_arrayVideoList objectAtIndex:indexPath.row] mutableCopy]
+                                          andThumbnail:((CellVideoList*)([self.tableView cellForRowAtIndexPath:indexPath])).imageThumbnail.image];
+        }
     }
 }
 
@@ -104,16 +118,24 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (section == 0)
+    if (section == 0 || section == 1)
         return 1;
     else
         return [m_arrayVideoList count];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+        return 44.0f;
+    else
+        return 100.0f;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -122,6 +144,12 @@
     CellVideoList *cell;
 
     if (indexPath.section == 0)
+    {
+        CellIdentifier = @"CellIDVideoList_downloadlist";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        [cell.contentView setBackgroundColor:[UIColor darkGrayColor]];
+    }
+    else if (indexPath.section == 1)
     {
         CellIdentifier = @"CellIDVideoList_playlist";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
@@ -142,9 +170,9 @@
             cell.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
             [cell.btnDownload setImage:[UIImage imageNamed:@"download_up.png"] forState:UIControlStateNormal];
             [cell.btnDownload setImage:[UIImage imageNamed:@"download_down.png"] forState:UIControlStateHighlighted];
+            cell.btnDownload.parentCellIndexPath = indexPath;
         }
         
-        [cell resetThumbnailView];
         [cell prepareThumbnail];
     }
 

@@ -11,6 +11,7 @@
 @interface VideoListTableViewController : UITableViewController
 {
     NSMutableArray* m_arrayVideoList;
+    NSMutableArray* m_arrayDownloadList;
 }
 
 @end

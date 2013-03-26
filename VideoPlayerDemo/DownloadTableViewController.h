@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DownloadTableViewController : UITableViewController
+@interface DownloadTableViewController : UITableViewController <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+{
+    NSMutableArray* m_arrayDownloadingList;
+}
+
+@property (nonatomic, retain) NSString* strFilepath;
+@property (nonatomic, retain) id fileHandle;
+
+- (void)startDownload:(NSMutableDictionary*)videoInfo andThumbnail:(UIImage*)image;
 
 @end

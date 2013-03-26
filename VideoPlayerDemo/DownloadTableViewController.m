@@ -13,7 +13,9 @@
 
 @end
 
-@implementation DownloadTableViewController
+@implementation DownloadTableViewController {
+    
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -44,6 +46,57 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)startDownload:(NSMutableDictionary*)videoInfo andThumbnail:(UIImage*)image
+{
+    NSLog(@"DownloadTableViewController, startDownload()");
+    
+    NSString* strFilename = [(NSString*)[videoInfo objectForKey:@"videourl"] lastPathComponent];
+    self.strFilepath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:strFilename];
+    
+    NSLog(@"%@", strFilename);
+    NSLog(@"%@", self.strFilepath);
+    
+    [videoInfo setObject:self.strFilepath forKey:@"filepath"];
+    
+    [m_arrayDownloadingList addObject:videoInfo];
+    
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[videoInfo objectForKey:@"videourl"]]];
+    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+    [connection start];
+}
+
+#pragma mark - NSConnectionDelegates
+
+- (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse *)response
+{
+    NSNumber* num = [NSNumber numberWithLongLong:[response expectedContentLength]];
+    NSLog(@"response expected: %lld", [num longLongValue]);
+    
+    [[NSFileManager defaultManager] createFileAtPath:self.strFilepath contents:nil attributes:nil];
+    self.fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.strFilepath];
+    if (self.fileHandle)
+    {
+        [self.fileHandle seekToEndOfFile];
+    }
+}
+
+- (void)connection:(NSURLConnection*)connection didReceiveData:(NSData *)data
+{
+    if (data)
+    {
+        NSLog(@"receive data length: %d", [data length]);
+        if (self.fileHandle)
+            [self.fileHandle seekToEndOfFile];
+        
+        [self.fileHandle writeData:data];
+    }
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    //[self.fileHandle close];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -55,7 +108,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 3;
+    return [m_arrayDownloadingList count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -130,6 +183,5 @@
 - (void)dealloc {
     [super dealloc];
 }
-- (IBAction)btnPlayClicked:(id)sender {
-}
+
 @end

@@ -37,14 +37,6 @@
     [super dealloc];
 }
 
-- (void)resetThumbnailView
-{
-    if (self.imageThumbnail)
-    {
-        self.imageThumbnail.image = nil;
-    }
-}
-
 - (void)refreshVideoThumbnail:(NSData*)imageData
 {
     UIImage* image = [[UIImage alloc] initWithData:imageData];
@@ -64,7 +56,8 @@
     NSOperationQueue* queue = [[NSOperationQueue alloc] init];
     
     [NSURLConnection sendAsynchronousRequest:request
-                                       queue:queue completionHandler:^(NSURLResponse* response, NSData* responseData, NSError* error)
+                                       queue:queue
+                           completionHandler:^(NSURLResponse* response, NSData* responseData, NSError* error)
         {
             if (error)
             {
