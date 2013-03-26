@@ -114,8 +114,7 @@
 {
     static NSString *CellIdentifier = @"";
     CellVideoList *cell;
-    NSString* debug = [NSString stringWithFormat:@"cell index row: %d", indexPath.row];
-    NSLog(debug);
+
     if (indexPath.section == 0)
     {
         CellIdentifier = @"CellIDVideoList_playlist";
@@ -137,6 +136,7 @@
             cell.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
         }
         
+        [cell resetThumbnailView];
         [cell prepareThumbnail];
     }
 

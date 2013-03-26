@@ -36,11 +36,19 @@
     [super dealloc];
 }
 
-- (void)refreshVideoThumbnail:(UIImage*)image
+- (void)resetThumbnailView
 {
-    CGRect frame = self.imageThumbnail.frame;
-    self.imageThumbnail.frame = frame;
-    //m_bLoaded = YES;
+    if (self.imageThumbnail)
+    {
+        self.imageThumbnail.image = nil;
+    }
+}
+
+- (void)refreshVideoThumbnail:(NSData*)imageData
+{
+    UIImage* image = [[UIImage alloc] initWithData:imageData];
+    self.imageThumbnail.image = image;
+    [image release];
 }
 
 - (void)prepareThumbnail
@@ -64,22 +72,11 @@
             else
             {
                 if (responseData)
-                {
-                    UIImage* image = [[UIImage alloc] initWithData:responseData];
-                    self.imageThumbnail.image = image;
-                    [image release];
-                    
-                    // Rearrange text-view position, container-view frame and scroll-view frame
-                    //
-                    // Important!! access UI elements like assigning size or frame, should be done in main thread
-                    // Else app will crash
-                    //
-                    //[self performSelectorOnMainThread:@selector(refreshVideoThumbnail) withObject:nil waitUntilDone:NO];
+                {                    
+                    [self performSelectorOnMainThread:@selector(refreshVideoThumbnail:) withObject:responseData waitUntilDone:NO];
                 }
             }
         }];
-    
-    //[request release];
 }
 
 @end

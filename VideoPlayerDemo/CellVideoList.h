@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSString* strThumbnailURL;
 @property (nonatomic, retain) NSString* strVideoURL;
 
+- (void)resetThumbnailView;
 - (void)prepareThumbnail;
 
 @end
