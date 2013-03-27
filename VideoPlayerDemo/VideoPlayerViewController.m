@@ -80,7 +80,7 @@
 #pragma mark - State-aware notifications
 - (void)onPlaybackStateChange
 {
-    NSLog([NSString stringWithFormat:@"playbackstate: %d", [self.player playbackState]]);
+    NSLog(@"playbackstate: %d", [self.player playbackState]);
     if ([self.player playbackState] == MPMoviePlaybackStateStopped)
     {
         if (self.player.fullscreen)
@@ -90,7 +90,7 @@
 
 - (void)onLoadStateChanged
 {
-    NSLog([NSString stringWithFormat:@"loadstate: %d", [self.player loadState]]);
+    NSLog(@"loadstate: %d", [self.player loadState]);
     if ([self.player loadState] == MPMovieLoadStatePlayable)
     {
         [self.player setFullscreen:YES];
@@ -106,7 +106,6 @@
 }
 
 - (IBAction)backToVideoList:(id)sender {
-    [self.player release];
     [self dismissModalViewControllerAnimated:YES];
 }
 @end

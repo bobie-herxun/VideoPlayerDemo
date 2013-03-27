@@ -13,8 +13,8 @@
 + (void)sendRequestGet:(NSString*)strAPIURL withPayload:(NSString*)strPayload completeCallback:(void (^)(NSData* data))completion
 {
     NSLog(@"Sending HTTP request");
-    NSLog(strAPIURL);
-    NSLog(strPayload);
+    //NSLog(strAPIURL);
+    //NSLog(strPayload);
     
     NSMutableURLRequest* request = [[[NSMutableURLRequest alloc] init] autorelease];
     [request setURL:[NSURL URLWithString:strAPIURL]];

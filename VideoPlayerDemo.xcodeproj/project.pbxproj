@@ -21,6 +21,9 @@
 		2C5BD69016F16E7A00E86041 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C5BD68E16F16E7A00E86041 /* MainStoryboard.storyboard */; };
 		2C5BD69316F16E7A00E86041 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BD69216F16E7A00E86041 /* ViewController.m */; };
 		2C5BD69B16F16FE200E86041 /* VideoListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BD69A16F16FE200E86041 /* VideoListTableViewController.m */; };
+		2C9B36D5170335ED00F8439E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C9B36D4170335ED00F8439E /* CoreData.framework */; };
+		2C9B36D81703379000F8439E /* Blockbuester.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2C9B36D61703379000F8439E /* Blockbuester.xcdatamodeld */; };
+		2C9B36DB17033DD200F8439E /* Videos.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C9B36DA17033DD200F8439E /* Videos.m */; };
 		80A43F461701627700930127 /* download_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 80A43F441701627700930127 /* download_down.png */; };
 		80A43F471701627700930127 /* download_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 80A43F451701627700930127 /* download_up.png */; };
 		80A43F4A1701785700930127 /* DownloadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 80A43F491701785700930127 /* DownloadTableViewController.m */; };
@@ -57,6 +60,10 @@
 		2C5BD69216F16E7A00E86041 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		2C5BD69916F16FE200E86041 /* VideoListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoListTableViewController.h; sourceTree = "<group>"; };
 		2C5BD69A16F16FE200E86041 /* VideoListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoListTableViewController.m; sourceTree = "<group>"; };
+		2C9B36D4170335ED00F8439E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		2C9B36D71703379000F8439E /* Blockbuester.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Blockbuester.xcdatamodel; sourceTree = "<group>"; };
+		2C9B36D917033DD200F8439E /* Videos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Videos.h; sourceTree = "<group>"; };
+		2C9B36DA17033DD200F8439E /* Videos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Videos.m; sourceTree = "<group>"; };
 		80A43F441701627700930127 /* download_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download_down.png; sourceTree = "<group>"; };
 		80A43F451701627700930127 /* download_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download_up.png; sourceTree = "<group>"; };
 		80A43F481701785700930127 /* DownloadTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadTableViewController.h; sourceTree = "<group>"; };
@@ -81,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C9B36D5170335ED00F8439E /* CoreData.framework in Frameworks */,
 				2C58681516F213D400E3DBA6 /* MediaPlayer.framework in Frameworks */,
 				2C5BD67716F16E7A00E86041 /* UIKit.framework in Frameworks */,
 				2C5BD67916F16E7A00E86041 /* Foundation.framework in Frameworks */,
@@ -126,6 +134,7 @@
 		2C5BD67516F16E7A00E86041 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2C9B36D4170335ED00F8439E /* CoreData.framework */,
 				2C58681416F213D400E3DBA6 /* MediaPlayer.framework */,
 				2C5BD67616F16E7A00E86041 /* UIKit.framework */,
 				2C5BD67816F16E7A00E86041 /* Foundation.framework */,
@@ -137,6 +146,7 @@
 		2C5BD67C16F16E7A00E86041 /* VideoPlayerDemo */ = {
 			isa = PBXGroup;
 			children = (
+				2C9B36DC17033DDD00F8439E /* CoreData */,
 				2C5BD68516F16E7A00E86041 /* AppDelegate.h */,
 				2C5BD68616F16E7A00E86041 /* AppDelegate.m */,
 				2C5BD68E16F16E7A00E86041 /* MainStoryboard.storyboard */,
@@ -173,6 +183,16 @@
 				2C5BD68C16F16E7A00E86041 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2C9B36DC17033DDD00F8439E /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				2C9B36D61703379000F8439E /* Blockbuester.xcdatamodeld */,
+				2C9B36D917033DD200F8439E /* Videos.h */,
+				2C9B36DA17033DD200F8439E /* Videos.m */,
+			);
+			name = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,6 +278,8 @@
 				80A43F4A1701785700930127 /* DownloadTableViewController.m in Sources */,
 				80A43F4D1701798600930127 /* CellVideoDownloadList.m in Sources */,
 				80A43F54170197FA00930127 /* DownloadVideoButton.m in Sources */,
+				2C9B36D81703379000F8439E /* Blockbuester.xcdatamodeld in Sources */,
+				2C9B36DB17033DD200F8439E /* Videos.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,6 +403,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2C9B36D61703379000F8439E /* Blockbuester.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2C9B36D71703379000F8439E /* Blockbuester.xcdatamodel */,
+			);
+			currentVersion = 2C9B36D71703379000F8439E /* Blockbuester.xcdatamodel */;
+			name = Blockbuester.xcdatamodeld;
+			path = ../Blockbuester.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 2C5BD66B16F16E7A00E86041 /* Project object */;
 }
