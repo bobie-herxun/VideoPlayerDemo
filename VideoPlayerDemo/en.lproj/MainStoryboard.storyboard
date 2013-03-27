@@ -60,8 +60,8 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="play.png" id="45F-Fh-CP4">
-                                            <rect key="frame" x="43" y="12" width="75" height="75"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Play.png" id="45F-Fh-CP4">
+                                            <rect key="frame" x="64" y="34" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -100,8 +100,8 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="play.png" id="0jK-4c-D1v">
-                                            <rect key="frame" x="43" y="12" width="75" height="75"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Play.png" id="0jK-4c-D1v">
+                                            <rect key="frame" x="64" y="34" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="t3d-sX-Ml1" customClass="DownloadVideoButton">
@@ -263,7 +263,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="play.png" width="150" height="150"/>
+        <image name="Play.png" width="256" height="256"/>
     </resources>
     <classes>
         <class className="CellVideoDownloadList" superclassName="UITableViewCell">
@@ -276,7 +276,7 @@
         <class className="CellVideoList" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CellVideoList.h"/>
             <relationships>
-                <relationship kind="outlet" name="btnDownload" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="btnDownload" candidateClass="DownloadVideoButton"/>
                 <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="labelCategory" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>

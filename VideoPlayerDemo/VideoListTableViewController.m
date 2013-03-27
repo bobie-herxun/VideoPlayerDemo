@@ -39,6 +39,9 @@
     if (!m_arrayVideoList)
         m_arrayVideoList = [[NSMutableArray alloc] initWithCapacity:0];
     
+    if (!m_arrayDownloadList)
+        m_arrayDownloadList = [[NSMutableArray alloc] initWithCapacity:0];
+    
     [self.tableView setDelaysContentTouches:NO];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
