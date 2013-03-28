@@ -96,6 +96,7 @@
     {
         VideoPlayerViewController* playerViewController = segue.destinationViewController;
         NSIndexPath* indexPath = [self.tableView indexPathForSelectedRow];
+        playerViewController.bPlayLocalFile = NO;
         if ([self.tableView indexPathForSelectedRow].section == 2)
             playerViewController.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
         else

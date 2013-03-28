@@ -13,6 +13,7 @@
 
 @property (nonatomic, retain) MPMoviePlayerController* player;
 @property (nonatomic, retain) NSString* strVideoURL;
+@property (nonatomic, assign) BOOL bPlayLocalFile;
 
 - (IBAction)backToVideoList:(id)sender;
 

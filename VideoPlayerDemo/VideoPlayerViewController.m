@@ -40,7 +40,10 @@
 
 - (void)prepareVideoPlayer
 {
-    self.player = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.strVideoURL]];
+    if (self.bPlayLocalFile)
+        self.player = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:self.strVideoURL]];
+    else
+        self.player = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:self.strVideoURL]];
     CGRect frame = CGRectMake(10, 10, 300, 200);;
     self.player.view.frame = frame;
     

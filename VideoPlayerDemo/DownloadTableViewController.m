@@ -214,6 +214,7 @@
     {
         VideoPlayerViewController* playerViewController = segue.destinationViewController;
         playerViewController.strVideoURL = self.strPlayFilepath;
+        playerViewController.bPlayLocalFile = YES;
     }
     
 }
