@@ -10,7 +10,9 @@
 
 @interface DownloadTableViewController : UITableViewController <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 {
+    NSMutableArray* m_arrayVideoArchive;
     NSMutableArray* m_arrayDownloadingList;
+    NSMutableArray* m_arrayAwaitingList;
 }
 
 @property (nonatomic, retain) NSString* strFilepath;

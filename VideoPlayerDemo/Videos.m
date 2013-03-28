@@ -15,5 +15,7 @@
 @dynamic downloadProgress;
 @dynamic title;
 @dynamic thumbnailFilepath;
+@dynamic videourl;
+@dynamic downloading;
 
 @end

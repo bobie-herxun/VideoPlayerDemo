@@ -193,6 +193,9 @@
                                 </view>
                                 <connections>
                                     <outlet property="btnPlay" destination="gH3-pg-mdv" id="eC2-R3-U5l"/>
+                                    <outlet property="imageThumbnail" destination="VdB-4m-rRD" id="WKt-CS-lQR"/>
+                                    <outlet property="labelTitle" destination="yRf-bg-It0" id="Poo-Nu-TOw"/>
+                                    <outlet property="progressDownload" destination="lqM-bO-6kw" id="kXf-3K-w55"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -271,6 +274,8 @@
             <relationships>
                 <relationship kind="action" name="btnPlayClicked:"/>
                 <relationship kind="outlet" name="btnPlay" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="CellVideoList" superclassName="UITableViewCell">

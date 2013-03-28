@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="11G63b" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12D78" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Videos" representedClassName="Videos" syncable="YES">
+        <attribute name="downloading" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="downloadProgress" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="filepath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnailFilepath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="videourl" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Videos" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="Videos" positionX="160" positionY="192" width="128" height="135"/>
     </elements>
 </model>

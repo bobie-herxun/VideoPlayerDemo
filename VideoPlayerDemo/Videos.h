@@ -16,5 +16,7 @@
 @property (nonatomic, retain) NSNumber * downloadProgress;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSString * thumbnailFilepath;
+@property (nonatomic, retain) NSString * videourl;
+@property (nonatomic, assign) BOOL       downloading;
 
 @end

@@ -10,6 +10,9 @@
 
 @interface CellVideoDownloadList : UITableViewCell
 
+@property (retain, nonatomic) IBOutlet UIImageView *imageThumbnail;
+@property (retain, nonatomic) IBOutlet UILabel *labelTitle;
+@property (retain, nonatomic) IBOutlet UIProgressView *progressDownload;
 @property (retain, nonatomic) IBOutlet UIButton *btnPlay;
 
 - (IBAction)btnPlayClicked:(id)sender;

@@ -99,12 +99,12 @@
         if ([self.tableView indexPathForSelectedRow].section == 2)
             playerViewController.strVideoURL = [[m_arrayVideoList objectAtIndex:indexPath.row] objectForKey:@"videourl"];
         else
-            playerViewController.strVideoURL = @"https://www.youtube.com/v/u1zgFlCw8Aw?version=3&autoplay=1"; //@"http://iphonestream.nexttv.com.tw/iphone/mbr.m3u8";
+            playerViewController.strVideoURL = @"http://iphonestream.nexttv.com.tw/iphone/mbr.m3u8";
     }
     if ([segue.identifier isEqualToString:@"segueAddDownload"])
     {
         NSLog(@"segueAddDownload");
-        //DownloadTableViewController* downloadTableViewController = segue.destinationViewController;
+        DownloadTableViewController* downloadTableViewController = segue.destinationViewController;
         NSIndexPath* indexPath = ((DownloadVideoButton*)sender).parentCellIndexPath;
         if (indexPath.section == 2)
         {
@@ -114,8 +114,11 @@
             [dictVideoToDownload setObject:strFilepath forKey:@"filepath"];
             [m_arrayDownloadList addObject:dictVideoToDownload];
             NSLog(@"video dict: %@", dictVideoToDownload);
-//            [downloadTableViewController startDownload:[[m_arrayVideoList objectAtIndex:indexPath.row] mutableCopy]
-//                                          andThumbnail:((CellVideoList*)([self.tableView cellForRowAtIndexPath:indexPath])).imageThumbnail.image];
+            
+            [downloadTableViewController startDownload:[[m_arrayVideoList objectAtIndex:indexPath.row] mutableCopy]
+                                          andThumbnail:((CellVideoList*)([self.tableView cellForRowAtIndexPath:indexPath])).imageThumbnail.image];
+            
+            [dictVideoToDownload release];
         }
     }
 }

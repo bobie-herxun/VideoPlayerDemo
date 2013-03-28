@@ -9,6 +9,11 @@
 #import "DownloadTableViewController.h"
 #import "CellVideoDownloadList.h"
 
+// CoreData entity
+#import <CoreData/CoreData.h>
+#import "AppDelegate.h"
+#import "Videos.h"
+
 @interface DownloadTableViewController ()
 
 @end
@@ -38,6 +43,16 @@
     
     [self.tableView setDelaysContentTouches:NO];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
+    /* Integrate core-data to handle download list */
+    /*
+     *  Note! make sure startDownload:andThumbnail: is called before entering this view
+     *  1. load whole list from DB
+     *  2. sort DB list into 2 lists: downloading & awaiting
+     *  3. start download
+     */
+    
+    [self performSelectorInBackground:@selector(fetchRecordsFromDB) withObject:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -48,6 +63,12 @@
 
 - (void)startDownload:(NSMutableDictionary*)videoInfo andThumbnail:(UIImage*)image
 {
+    /*
+        Add this record into DB
+        Remember to store the image to device and use the filepath for the DB record
+        Also check if this record alreay exists!
+     */
+    
     NSLog(@"DownloadTableViewController, startDownload()");
     
     NSString* strFilename = [(NSString*)[videoInfo objectForKey:@"videourl"] lastPathComponent];
@@ -56,13 +77,79 @@
     NSLog(@"%@", strFilename);
     NSLog(@"%@", self.strFilepath);
     
-    [videoInfo setObject:self.strFilepath forKey:@"filepath"];
+    /**************************************************************************************************************/
     
-    [m_arrayDownloadingList addObject:videoInfo];
+    /* Check if this record already exists in DB (by comparing "videourl") */
+    NSFetchRequest* requestFetch = [[NSFetchRequest alloc] init];
+    [requestFetch setPredicate:[NSPredicate predicateWithFormat:@"videourl == %@", [videoInfo objectForKey:@"videourl"]]];
     
-    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[videoInfo objectForKey:@"videourl"]]];
-    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-    [connection start];
+    NSEntityDescription* entity = [NSEntityDescription entityForName:@"Videos"
+                                              inManagedObjectContext:[(AppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext]];
+    [requestFetch setEntity:entity];
+    NSError* error = nil;
+    NSArray* returnObjs = [[(AppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext] executeFetchRequest:requestFetch error:&error];
+    [requestFetch release];
+    
+    if ([returnObjs count])
+        return;
+    
+    /* Store this thumbnail as local file, so we can use the filepath for core-data */
+    NSString* strThumbnailFilename = [strFilename stringByDeletingPathExtension];
+    strThumbnailFilename = [strThumbnailFilename stringByAppendingPathExtension:@"png"];
+    NSData* binaryImage = UIImagePNGRepresentation(image);
+    [binaryImage writeToFile:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:strThumbnailFilename]
+                  atomically:YES];
+    
+    /* If this is a new record, insert it into DB */
+    Videos* videoToDownload = (Videos*)[NSEntityDescription insertNewObjectForEntityForName:@"Videos"
+                                                                     inManagedObjectContext:[(AppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext]];
+    
+    videoToDownload.title = [videoInfo objectForKey:@"title"];
+    videoToDownload.videourl = [videoInfo objectForKey:@"videourl"];
+    videoToDownload.filepath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:strFilename];
+    videoToDownload.thumbnailFilepath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:strThumbnailFilename];
+    videoToDownload.downloadProgress = @0.0f;
+    
+    if (![[(AppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext] save:&error])
+        NSLog(@"Fail to insert video-to-download record into DB");
+
+    /* Last bu not least, let's start download the video */
+    
+//    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[videoInfo objectForKey:@"videourl"]]];
+//    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+//    [connection start];
+}
+
+- (void)fetchRecordsFromDB
+{
+    /* Fill in 3 lists: m_arrayVideoArchive, m_arrayDownloadingList, m_arrayAwaitingList*/
+    if (!m_arrayVideoArchive)
+        m_arrayVideoArchive = [[NSMutableArray alloc] initWithCapacity:0];
+    
+    if (!m_arrayDownloadingList)
+        m_arrayDownloadingList = [[NSMutableArray alloc] initWithCapacity:0];
+    
+    if (!m_arrayAwaitingList)
+        m_arrayAwaitingList = [[NSMutableArray alloc] initWithCapacity:0];
+    
+    NSFetchRequest* requestFetch = [[NSFetchRequest alloc] init];
+    NSEntityDescription* entity = [NSEntityDescription entityForName:@"Videos"
+                                              inManagedObjectContext:[(AppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext]];
+    [requestFetch setEntity:entity];
+    NSError* error = nil;
+    NSArray* returnObjs = [[(AppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext] executeFetchRequest:requestFetch error:&error];
+    [requestFetch release];
+    
+    for (Videos* video in returnObjs)
+    {
+        if ([video.downloadProgress floatValue] > 0.0f && [video.downloadProgress floatValue] < 100.0f)
+            [m_arrayAwaitingList addObject:video];
+        
+        [m_arrayVideoArchive addObject:video];
+    }
+    
+    /* notify main-thread to reload table data */
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 
 #pragma mark - NSConnectionDelegates
@@ -108,7 +195,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [m_arrayDownloadingList count];
+    return [m_arrayVideoArchive count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -116,12 +203,20 @@
     static NSString *CellIdentifier = @"CellIDVideoDownloadList";
     CellVideoDownloadList *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     if ((indexPath.row % 2) == 0)
-        [cell.contentView setBackgroundColor:[UIColor darkGrayColor]];
+        [cell.contentView setBackgroundColor:[UIColor colorWithRed:40.0/255.0 green:40.0/255.0 blue:40.0/255.0 alpha:1.0]];
     else
         [cell.contentView setBackgroundColor:[UIColor blackColor]];
     
+    Videos* currentVideo = [m_arrayVideoArchive objectAtIndex:indexPath.row];
+    
+    cell.imageThumbnail.image = [UIImage imageWithContentsOfFile:currentVideo.thumbnailFilepath];
+    cell.labelTitle.text = currentVideo.title;
+    [cell.progressDownload setProgress:[currentVideo.downloadProgress floatValue]];
+    
     [cell.btnPlay setImage:[UIImage imageNamed:@"play_downloaded_up.png"] forState:UIControlStateNormal];
     [cell.btnPlay setImage:[UIImage imageNamed:@"play_downloaded_down.png"] forState:UIControlStateHighlighted];
+    [cell.btnPlay setEnabled:([currentVideo.downloadProgress floatValue] == 100.0f)? YES : NO ];
+
     // Configure the cell...
     
     return cell;

@@ -28,6 +28,9 @@
 
 - (void)dealloc {
     [_btnPlay release];
+    [_imageThumbnail release];
+    [_labelTitle release];
+    [_progressDownload release];
     [super dealloc];
 }
 
