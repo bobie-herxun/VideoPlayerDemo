@@ -15,6 +15,8 @@
 @property (retain, nonatomic) IBOutlet UIProgressView *progressDownload;
 @property (retain, nonatomic) IBOutlet UIButton *btnPlay;
 
+@property (retain, nonatomic) NSString* strFilename;
+
 - (IBAction)btnPlayClicked:(id)sender;
 
 @end

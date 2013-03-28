@@ -114,10 +114,37 @@
         NSLog(@"Fail to insert video-to-download record into DB");
 
     /* Last bu not least, let's start download the video */
+    [self addIntoDownloadChain:videoToDownload];
+}
+
+- (void)addIntoDownloadChain:(Videos*)videoToDownload
+{
+    if (!m_arrayConnectionHandleProgress)
+        m_arrayConnectionHandleProgress = [[NSMutableArray alloc] initWithCapacity:0];
     
-//    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[videoInfo objectForKey:@"videourl"]]];
-//    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-//    [connection start];
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:videoToDownload.videourl]];
+    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+    
+    [[NSFileManager defaultManager] createFileAtPath:videoToDownload.filepath
+                                            contents:nil
+                                          attributes:nil];
+    NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:videoToDownload.filepath];
+    
+    NSNumber* currentSize = [NSNumber numberWithLongLong:0];
+    NSString* filename = [videoToDownload.filepath lastPathComponent];
+    NSMutableDictionary* dictVideoToDownload = [NSMutableDictionary dictionaryWithObjects:@[ filename, connection, fileHandle, currentSize ]
+                                                                                  forKeys:@[ @"filename", @"connection", @"handle", @"currentsize" ]];
+    
+    [m_arrayConnectionHandleProgress addObject:dictVideoToDownload];
+    
+    [connection start];
+}
+
+- (void)shutdownDownloadChain
+{
+    /* pause all NSURLConnections */
+    /* close all file handles */
+    /* refresh records in DB */
 }
 
 - (void)fetchRecordsFromDB
@@ -152,36 +179,99 @@
     [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 
+- (void)updateCellProgress:(float)fProgress withFilename:(NSString*)strFilename
+{
+    NSIndexPath* indexPath;
+    for (int i = 0; i < [m_arrayVideoArchive count]; ++i)
+    {
+        indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        
+        CellVideoDownloadList* downloadCell = (CellVideoDownloadList*)[self.tableView cellForRowAtIndexPath:indexPath];
+        if ([downloadCell.strFilename isEqualToString:strFilename])
+        {
+            [downloadCell.progressDownload setProgress:fProgress];
+            
+            NSLog(@"progress: %3.2f", fProgress);
+            if (fProgress >= 1.0f)
+            {
+                [downloadCell.btnPlay setEnabled:YES];
+            }
+        }
+    }
+}
+
+- (void)cleanUpAndRefreshDB
+{
+    
+}
+
 #pragma mark - NSConnectionDelegates
 
 - (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse *)response
 {
-    NSNumber* num = [NSNumber numberWithLongLong:[response expectedContentLength]];
-    NSLog(@"response expected: %lld", [num longLongValue]);
-    
-    [[NSFileManager defaultManager] createFileAtPath:self.strFilepath contents:nil attributes:nil];
-    self.fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.strFilepath];
-    if (self.fileHandle)
+    for (NSMutableDictionary* connectionHandleProgress in m_arrayConnectionHandleProgress)
     {
-        [self.fileHandle seekToEndOfFile];
+        NSURLConnection* myConnection = [connectionHandleProgress objectForKey:@"connection"];
+        if (myConnection == connection)
+        {
+            NSFileHandle* fileHandle = [connectionHandleProgress objectForKey:@"handle"];
+            if (fileHandle)
+                [fileHandle seekToEndOfFile];
+            
+            NSNumber* num = [NSNumber numberWithLongLong:[response expectedContentLength]];
+            [connectionHandleProgress setValue:num forKey:@"expectedsize"];
+            
+            break;
+        }
     }
 }
 
 - (void)connection:(NSURLConnection*)connection didReceiveData:(NSData *)data
 {
-    if (data)
+    for (NSMutableDictionary* connectionHandleProgress in m_arrayConnectionHandleProgress)
     {
-        NSLog(@"receive data length: %d", [data length]);
-        if (self.fileHandle)
-            [self.fileHandle seekToEndOfFile];
-        
-        [self.fileHandle writeData:data];
+        NSURLConnection* myConnection = [connectionHandleProgress objectForKey:@"connection"];
+        if (myConnection == connection)
+        {
+            NSFileHandle* fileHandle = [connectionHandleProgress objectForKey:@"handle"];
+            if (fileHandle)
+            {
+                [fileHandle seekToEndOfFile];
+                [fileHandle writeData:data];
+            }
+            
+            NSNumber* currentSize = [connectionHandleProgress objectForKey:@"currentsize"];
+            currentSize = [NSNumber numberWithLongLong:[currentSize intValue] + [data length]];
+            
+            [connectionHandleProgress setValue:currentSize forKey:@"currentsize"];
+            
+            NSNumber* expectedSize = [connectionHandleProgress objectForKey:@"expectedsize"];
+            float fProgress = [currentSize floatValue] / [expectedSize floatValue];
+            
+            /* Notify UI to update progress */
+            [self updateCellProgress:fProgress withFilename:[connectionHandleProgress objectForKey:@"filename"]];
+            
+            break;
+        }
     }
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    //[self.fileHandle close];
+    for (NSMutableDictionary* connectionHandleProgress in m_arrayConnectionHandleProgress)
+    {
+        NSURLConnection* myConnection = [connectionHandleProgress objectForKey:@"connection"];
+        if (myConnection == connection)
+        {
+            NSFileHandle* fileHandle = [connectionHandleProgress objectForKey:@"handle"];
+            if (fileHandle)
+            {
+                [fileHandle closeFile];
+            }
+            
+            break;
+        }
+    }
 }
 
 #pragma mark - Table view data source
@@ -215,7 +305,8 @@
     
     [cell.btnPlay setImage:[UIImage imageNamed:@"play_downloaded_up.png"] forState:UIControlStateNormal];
     [cell.btnPlay setImage:[UIImage imageNamed:@"play_downloaded_down.png"] forState:UIControlStateHighlighted];
-    [cell.btnPlay setEnabled:([currentVideo.downloadProgress floatValue] == 100.0f)? YES : NO ];
+    //[cell.btnPlay setEnabled:([currentVideo.downloadProgress floatValue] == 100.0f)? YES : NO ];
+    cell.strFilename = [currentVideo.filepath lastPathComponent];
 
     // Configure the cell...
     
@@ -276,6 +367,7 @@
 }
 
 - (void)dealloc {
+    [self cleanUpAndRefreshDB];
     [super dealloc];
 }
 

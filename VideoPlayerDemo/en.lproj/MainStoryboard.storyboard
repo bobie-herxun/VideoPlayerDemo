@@ -166,7 +166,7 @@
                                             <rect key="frame" x="76" y="25" width="194" height="9"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </progressView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gH3-pg-mdv">
+                                        <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gH3-pg-mdv">
                                             <rect key="frame" x="283" y="7" width="30" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -276,6 +276,7 @@
                 <relationship kind="outlet" name="btnPlay" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="imageThumbnail" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="labelTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="progressDownload" candidateClass="UIProgressView"/>
             </relationships>
         </class>
         <class className="CellVideoList" superclassName="UITableViewCell">

@@ -13,6 +13,16 @@
     NSMutableArray* m_arrayVideoArchive;
     NSMutableArray* m_arrayDownloadingList;
     NSMutableArray* m_arrayAwaitingList;
+    
+    /* Each entry in m_arrayConnecionHandleProgress contains 4 pairs of key-value
+        "connection"    NSURLConnection
+        "handle"        NSFileHandle
+        "currentsize"      data amount received and written into file-handle
+        "expectedsize   total data amount supposed to be downloaded for this connection
+     
+        each entry should use the filename, like "15044723.mp4" as its key
+     */
+    NSMutableArray* m_arrayConnectionHandleProgress;
 }
 
 @property (nonatomic, retain) NSString* strFilepath;
