@@ -27,6 +27,7 @@
 
 @property (nonatomic, retain) NSString* strFilepath;
 @property (nonatomic, retain) id fileHandle;
+@property (nonatomic, retain) NSString* strPlayFilepath;
 
 - (void)startDownload:(NSMutableDictionary*)videoInfo andThumbnail:(UIImage*)image;
 

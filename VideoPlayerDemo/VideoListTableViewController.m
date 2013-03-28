@@ -103,7 +103,6 @@
     }
     if ([segue.identifier isEqualToString:@"segueAddDownload"])
     {
-        NSLog(@"segueAddDownload");
         DownloadTableViewController* downloadTableViewController = segue.destinationViewController;
         NSIndexPath* indexPath = ((DownloadVideoButton*)sender).parentCellIndexPath;
         if (indexPath.section == 2)

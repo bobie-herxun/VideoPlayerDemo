@@ -13,6 +13,7 @@
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 #import "Videos.h"
+#import "VideoPlayerViewController.h"
 
 @interface DownloadTableViewController ()
 
@@ -21,6 +22,8 @@
 @implementation DownloadTableViewController {
     
 }
+
+@synthesize strPlayFilepath;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -187,11 +190,10 @@
         indexPath = [NSIndexPath indexPathForRow:i inSection:0];
         
         CellVideoDownloadList* downloadCell = (CellVideoDownloadList*)[self.tableView cellForRowAtIndexPath:indexPath];
-        if ([downloadCell.strFilename isEqualToString:strFilename])
+        if ([[downloadCell.strFilepath lastPathComponent] isEqualToString:strFilename])
         {
             [downloadCell.progressDownload setProgress:fProgress];
             
-            NSLog(@"progress: %3.2f", fProgress);
             if (fProgress >= 1.0f)
             {
                 [downloadCell.btnPlay setEnabled:YES];
@@ -202,6 +204,17 @@
 
 - (void)cleanUpAndRefreshDB
 {
+    
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //segueVideoPlayer_download
+    if ([segue.identifier isEqualToString:@"segueVideoPlayer_download"])
+    {
+        VideoPlayerViewController* playerViewController = segue.destinationViewController;
+        playerViewController.strVideoURL = self.strPlayFilepath;
+    }
     
 }
 
@@ -306,7 +319,7 @@
     [cell.btnPlay setImage:[UIImage imageNamed:@"play_downloaded_up.png"] forState:UIControlStateNormal];
     [cell.btnPlay setImage:[UIImage imageNamed:@"play_downloaded_down.png"] forState:UIControlStateHighlighted];
     //[cell.btnPlay setEnabled:([currentVideo.downloadProgress floatValue] == 100.0f)? YES : NO ];
-    cell.strFilename = [currentVideo.filepath lastPathComponent];
+    cell.strFilepath = currentVideo.filepath;
 
     // Configure the cell...
     

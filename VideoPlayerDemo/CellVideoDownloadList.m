@@ -7,6 +7,7 @@
 //
 
 #import "CellVideoDownloadList.h"
+#import "DownloadTableViewController.h"
 
 @implementation CellVideoDownloadList
 
@@ -35,7 +36,18 @@
 }
 
 - (IBAction)btnPlayClicked:(id)sender {
-
+    DownloadTableViewController* parentTableView;
+    for (UIView* next = [self superview]; next; next = next.superview)
+    {
+        UIResponder* nextResponder = [next nextResponder];
+        
+        if ([nextResponder isKindOfClass:[UITableViewController class]])
+        {
+            parentTableView = (DownloadTableViewController*)(nextResponder);
+            parentTableView.strPlayFilepath = self.strFilepath;
+            break;
+        }
+    }
 }
 
 @end
