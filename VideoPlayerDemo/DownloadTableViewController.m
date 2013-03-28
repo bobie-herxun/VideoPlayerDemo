@@ -37,12 +37,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     [self.tableView setDelaysContentTouches:NO];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -54,7 +48,6 @@
      *  2. sort DB list into 2 lists: downloading & awaiting
      *  3. start download
      */
-    
     [self performSelectorInBackground:@selector(fetchRecordsFromDB) withObject:nil];
 }
 
@@ -71,8 +64,6 @@
         Remember to store the image to device and use the filepath for the DB record
         Also check if this record alreay exists!
      */
-    
-    NSLog(@"DownloadTableViewController, startDownload()");
     
     NSString* strFilename = [(NSString*)[videoInfo objectForKey:@"videourl"] lastPathComponent];
     self.strFilepath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:strFilename];
@@ -135,8 +126,8 @@
     
     NSNumber* currentSize = [NSNumber numberWithLongLong:0];
     NSString* filename = [videoToDownload.filepath lastPathComponent];
-    NSMutableDictionary* dictVideoToDownload = [NSMutableDictionary dictionaryWithObjects:@[ filename, connection, fileHandle, currentSize ]
-                                                                                  forKeys:@[ @"filename", @"connection", @"handle", @"currentsize" ]];
+    NSMutableDictionary* dictVideoToDownload = [NSMutableDictionary dictionaryWithObjects:@[ videoToDownload.videourl, filename, connection, fileHandle, currentSize ]
+                                                                                  forKeys:@[ @"videourl", @"filename", @"connection", @"handle", @"currentsize" ]];
     
     [m_arrayConnectionHandleProgress addObject:dictVideoToDownload];
     
@@ -148,6 +139,28 @@
     /* pause all NSURLConnections */
     /* close all file handles */
     /* refresh records in DB */
+    
+    for (NSMutableDictionary* dictVideoToDownload in m_arrayConnectionHandleProgress)
+    {
+        NSFetchRequest* requestFetch = [[NSFetchRequest alloc] init];
+        [requestFetch setPredicate:[NSPredicate predicateWithFormat:@"videourl == %@", [dictVideoToDownload objectForKey:@"videourl"]]];
+        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Videos"
+                                                  inManagedObjectContext:[(AppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext]];
+        [requestFetch setEntity:entity];
+        NSError* error = nil;
+        NSArray* returnObjs = [[(AppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext] executeFetchRequest:requestFetch error:&error];
+        [requestFetch release];
+        
+        Videos* videoToUpdate = [returnObjs objectAtIndex:0];
+        videoToUpdate.downloadProgress = [NSNumber numberWithFloat:[(NSNumber*)[dictVideoToDownload objectForKey:@"currentsize"] floatValue] /
+                                                                   [(NSNumber*)[dictVideoToDownload objectForKey:@"expectedsize"] floatValue] ];
+        
+        if (![[(AppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext] save:&error])
+            NSLog(@"Fail to insert video-to-download record into DB");
+        
+        NSFileHandle* fileHandle = (NSFileHandle*)[dictVideoToDownload objectForKey:@"handle"];
+        [fileHandle closeFile];
+    }
 }
 
 - (void)fetchRecordsFromDB
@@ -209,7 +222,6 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    //segueVideoPlayer_download
     if ([segue.identifier isEqualToString:@"segueVideoPlayer_download"])
     {
         VideoPlayerViewController* playerViewController = segue.destinationViewController;
@@ -319,7 +331,7 @@
     
     [cell.btnPlay setImage:[UIImage imageNamed:@"play_downloaded_up.png"] forState:UIControlStateNormal];
     [cell.btnPlay setImage:[UIImage imageNamed:@"play_downloaded_down.png"] forState:UIControlStateHighlighted];
-    //[cell.btnPlay setEnabled:([currentVideo.downloadProgress floatValue] == 100.0f)? YES : NO ];
+    [cell.btnPlay setEnabled:([currentVideo.downloadProgress floatValue] == 1.0f)? YES : NO ];
     cell.strFilepath = currentVideo.filepath;
 
     // Configure the cell...
@@ -381,7 +393,7 @@
 }
 
 - (void)dealloc {
-    [self cleanUpAndRefreshDB];
+    [self shutdownDownloadChain];
     [super dealloc];
 }
 
